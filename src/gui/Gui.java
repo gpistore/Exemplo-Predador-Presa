@@ -28,7 +28,7 @@ public class Gui extends JFrame {
 			for(int j=0;j<tabela[0].length;j++) {
 				JPanel bloco = new JPanel();
 				/*
-				 VALOR		REPRESENTAÇÃO 
+				 VALOR		REPRESENTAï¿½ï¿½O 
 				 0			Pixel livre (verde)
 				 1			Presa em modo normal (Branco)
 				 2			Presa no modo defensivo (Vermelho) 
