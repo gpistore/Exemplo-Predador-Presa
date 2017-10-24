@@ -30,9 +30,8 @@ public class Ambiente {
 	    // 2 = Predados Caçar
 		// 3 = Presa Viver
 		// 4 = Presa Fugir
-	   
-	   
-	    private static int[][] tabuleiro = new int[nrLinhas][nrColunas];
+	private static int[][] tabuleiro = new int[nrLinhas][nrColunas];
+	private static int[][] rastro = new int[nrLinhas][nrColunas];
 	    static Gui tela;
 	   
 	    public static void inicializa(Gui tela2) {
@@ -159,7 +158,7 @@ public class Ambiente {
 	        tabela[linha][coluna]= tipo;
 	           
 	        try {
-	            tela.desenhar(tabela);
+	            tela.desenhar(tabela,rastro);
 	        } catch (InterruptedException e) {
 	            // TODO Auto-generated catch block
 	            e.printStackTrace();
