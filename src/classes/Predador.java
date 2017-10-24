@@ -10,9 +10,9 @@ public class Predador {
 	private int linha, coluna;
 	private int linhaNova, colunaNova;
 	private int dir;
-	private int iPresa,jPresa;
-	
-	
+	private int iteracoes;
+	private int tipo;
+		
 	
 	public Predador(int linha, int coluna)
 	{
@@ -23,37 +23,138 @@ public class Predador {
 	
 	public void acao()
 	{
-		Ambiente.moveAgente(linha, coluna, linhaNova, colunaNova, 1, dir);
+		Ambiente.moveAgente(linha, coluna, linhaNova, colunaNova, tipo, dir);
 		linha = linhaNova;
 		coluna = colunaNova;
 	}
 	
 	public void escolha()
 	{
-		if(verificaPresa())
+		int posicao = verificaPresa(); 
+		if(posicao > 0)
 		{
-			cacar();
+			cacar(posicao);
 		}
 		else
-		{
+		{			
 			viver();
 		}
 	}
 	
-	private void cacar()
+	private void cacar(int posicaoPresa)
 	{
-		//if(iPresa ==  )
+		/*
+		   1 diagonal superior esquerda
+		   2 superior
+		   3 diagonal superior direita
+		   4 esquerda
+		   6 direita
+		   7 diagonal inferior esquerda
+		   8 inferior
+		   9 diagonal inferior direita
+		   
+		 */
 		
+		tipo = 2;
+		if (iteracoes < 5){			
+			iteracoes++;
+			velocidade = 4;			
+		}
+		else
+			velocidade = 1;
 		
-		
+		Random r = new Random();
+		int posAleatoria = r.nextInt(2);
+		switch (posicaoPresa) {
+			case 1:
+			{
+				if (posAleatoria == 0){
+					dir = 3;
+					colunaNova = Ambiente.ajustaColuna(coluna-velocidade);
+				}
+				else{
+					dir = 0;
+					linhaNova = Ambiente.ajustaLinha(linha-velocidade);
+				}
+								
+				break;
+			}
+			
+			case 2:
+			{
+				dir = 0;
+				linhaNova = Ambiente.ajustaLinha(linha-velocidade);				
+				break;
+			}		
+			case 3:
+			{
+				if (posAleatoria == 0){
+					dir = 1;
+					colunaNova = Ambiente.ajustaColuna(coluna+velocidade);
+				}
+				else{
+					dir = 0;
+					linhaNova = Ambiente.ajustaLinha(linha-velocidade);
+				}
+				
+				break;
+			}	
+			case 4:
+			{
+				dir = 3;
+				colunaNova = Ambiente.ajustaColuna(coluna-velocidade);			
+				break;
+			}	
+			case 6:
+			{
+				dir = 1;
+				colunaNova = Ambiente.ajustaColuna(coluna+velocidade);				
+				break;
+			}	
+			case 7:
+			{
+				if (posAleatoria == 0){
+					dir = 3;
+					colunaNova = Ambiente.ajustaColuna(coluna-velocidade);
+				}
+				else{
+					dir = 2;
+					linhaNova = Ambiente.ajustaLinha(linha+velocidade);
+				}
+				
+				break;
+			}	
+			case 8:
+			{
+				dir = 2;
+				linhaNova = Ambiente.ajustaLinha(linha+velocidade);	
+				break;
+			}	
+			case 9:
+			{
+				if (posAleatoria == 0){
+					dir = 1;
+					colunaNova = Ambiente.ajustaColuna(coluna+velocidade);
+				}
+				else{
+					dir = 2;
+					linhaNova = Ambiente.ajustaLinha(linha+velocidade);
+				}
+				
+				break;
+			}			
+		}					
 	}
 	
 	private void viver()
-	{
+	{		
 		Random gerador = new Random();
 		int r = gerador.nextInt(4);
 		int i = linha;
 		int j = coluna;
+		
+		iteracoes = 0;
+		tipo = 1;
 		
 		int feromonio = verificaFeromonio();
 		
@@ -131,34 +232,19 @@ public class Predador {
 	}
 
 
-	private boolean verificaPresa()
+	private int verificaPresa()
 	{
-		boolean f = false;
-		for(int i = linha-1 ; i<linha+2 ; i++)
+		int posicao = 0;
+		for(int i = linha-1 ; i<linha+2 ; i++){			
 			for(int j = coluna -1 ; j<coluna+2 ; j++)
 			{
-				if (Ambiente.existePresa(i, j))
-				{
-					iPresa = i;
-					jPresa = j;
-					f = true;
+				posicao++;
+				if (Ambiente.existePresa(i, j) != 0)
+				{									
+					return posicao;
 				}
 			}
-		return f;
-	}
-	
-	private int ajustaLinha(int linha)
-	{
-		if(linha<0) linha += Ambiente.getNrLinhas();
-		if(linha>=Ambiente.getNrLinhas()) linha -= Ambiente.getNrLinhas();
-		return linha;
-	}
-	
-	private int ajustaColuna(int coluna)
-	{
-		if(coluna<0) coluna+= Ambiente.getNrLinhas();
-		if(coluna>=Ambiente.getNrColunas()) coluna -= Ambiente.getNrColunas();
-		return linha;
-	}
-	
+		}
+		return 0;
+	}		
 }

@@ -26,8 +26,10 @@ public class Ambiente {
 
 	private static int nrPredadores = 3;
 	   
-	    // 1 = Predador
-	    // 2 = Presa
+	    // 1 = Predador Viver
+	    // 2 = Predados Caçar
+		// 3 = Presa Viver
+		// 4 = Presa Fugir
 	   
 	   
 	    private static int[][] tabuleiro = new int[nrLinhas][nrColunas];
@@ -88,15 +90,15 @@ public class Ambiente {
 	        }   
 	    }
 	   
-	    public static boolean existePresa(int i, int j) {
+	    public static int existePresa(int i, int j) {
 	    	if(i<0) i+=nrLinhas;
 	    	if(j<0) j+=nrColunas;
 	    	if(i>=nrLinhas) i-=nrLinhas;
 	    	if(j>=nrColunas) j-=nrColunas;
-            if (tabuleiro[i][j] == 2) {
-                return true;
+            if (tabuleiro[i][j] == 3 || tabuleiro[i][j] == 4) {
+                return tabuleiro[i][j];
             }
-            return false;
+            return 0;
 	    }
 	    
 	    public static boolean existePredador(int i, int j) {
@@ -104,7 +106,18 @@ public class Ambiente {
 	    	if(j<0) j+=nrColunas;
 	    	if(i>=nrLinhas) i-=nrLinhas;
 	    	if(j>=nrColunas) j-=nrColunas;
-	        if (tabuleiro[i][j] == 1) {
+	        if (tabuleiro[i][j] == 1 || tabuleiro[i][j] == 2) {
+	            return true; 
+	        }
+		    return false;
+	    }
+	    
+	    public static boolean existePresaFugindo(int i, int j) {
+	    	if(i<0) i+=nrLinhas;
+	    	if(j<0) j+=nrColunas;
+	    	if(i>=nrLinhas) i-=nrLinhas;
+	    	if(j>=nrColunas) j-=nrColunas;
+	        if (tabuleiro[i][j] == 4) {
 	            return true; 
 	        }
 		    return false;
@@ -154,19 +167,20 @@ public class Ambiente {
 	    }
 
 		public static void moveAgente(int iAntigo, int jAntigo, int i, int j, int tipo, int dir) {
-			if(tabuleiro[i][j]!=1 && tabuleiro[i][j] != 2)
+			if(tabuleiro[i][j] == 0 || tabuleiro[i][j] >= 5)
 			{
 				tabuleiro[iAntigo][jAntigo] = 0;
-				tabuleiro[i][j] = tipo;
-				if(tipo == 1)
+				if(tipo == 1)				
+					tabuleiro[i][j] = tipo;			
+				else if(tipo == 2)
 				{
-					int iAtual = iAntigo, jAtual = jAntigo;
+					int iAtual = iAntigo, jAtual = jAntigo, nivelFeromonio = 6;
 					switch (dir) 
 					{
 						case 0:
 							do
 							{
-								tabuleiro[iAtual][jAtual] = 8;
+								tabuleiro[iAtual][jAtual] = nivelFeromonio++;
 								iAtual--;
 								if(i<0) i+=nrLinhas;
 							}while(iAtual!=i);							
@@ -175,7 +189,7 @@ public class Ambiente {
 						case 1:
 							do
 							{
-								tabuleiro[iAtual][jAtual] = 8;
+								tabuleiro[iAtual][jAtual] = nivelFeromonio++;
 								jAtual++;
 								if(j>=nrColunas) j-=nrColunas;
 							}while(jAtual!=j);							
@@ -184,7 +198,7 @@ public class Ambiente {
 						case 2:
 							do
 							{
-								tabuleiro[iAtual][jAtual] = 8;
+								tabuleiro[iAtual][jAtual] = nivelFeromonio++;
 								iAtual++;
 								if(i>=nrLinhas) i-=nrLinhas;
 							}while(iAtual!=i);	
@@ -193,7 +207,7 @@ public class Ambiente {
 						case 3:
 							do
 							{
-								tabuleiro[iAtual][jAtual] = 8;
+								tabuleiro[iAtual][jAtual] = nivelFeromonio++;
 								jAtual--;
 								if(j<0) j+=nrColunas;
 							}while(jAtual!=j);	
@@ -201,10 +215,10 @@ public class Ambiente {
 					}
 					
 				}
-				
-				
-			}
-			
+				else if (tipo == 3){
+					
+				}								
+			}			
 		}
 		
 		public void atualizaRastros()
@@ -213,11 +227,25 @@ public class Ambiente {
 			{
 				for(int j=0;j<nrColunas;j++)
 				{
-					if(tabuleiro[i][j]>3)
+					if(tabuleiro[i][j]>5)
 						tabuleiro[i][j]--;
-					if(tabuleiro[i][j]==3)
+					if(tabuleiro[i][j]==5)
 						tabuleiro[i][j]=0;
 				}
 			}
 		}
+		
+		public static int ajustaLinha(int linha)
+		{
+			if(linha<0) linha += Ambiente.getNrLinhas();
+			if(linha>=Ambiente.getNrLinhas()) linha -= Ambiente.getNrLinhas();
+			return linha;
+		}
+		
+		public static int ajustaColuna(int coluna)
+		{
+			if(coluna<0) coluna+= Ambiente.getNrLinhas();
+			if(coluna>=Ambiente.getNrColunas()) coluna -= Ambiente.getNrColunas();
+			return coluna;
+		}		
 }
