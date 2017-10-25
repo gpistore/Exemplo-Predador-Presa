@@ -46,7 +46,7 @@ public class Presa {
 	}
 	
 	private void fugir(int posicao, int tipo){
-		if (tipo == 3){
+		if (tipo == 3){ // viver
 			if (iteracoes < 8){			
 				iteracoes++;
 				velocidade = (qualidadeEmocional + intesidadeEmocional)/2;			
@@ -54,7 +54,7 @@ public class Presa {
 			else
 				velocidade = 1;
 		}
-		else{
+		else{ // fugir
 			
 		}
 		
