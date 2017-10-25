@@ -20,14 +20,14 @@ public class Main {
 		int k=0,l=0;
 		for(int i=0;i<Ambiente.getNrLinhas();i++)
 		{
-			for(int j=0;j<Ambiente.getNrColunas();i++)
+			for(int j=0;j<Ambiente.getNrColunas();j++)
 			{
 				if(Ambiente.existePredador(i,j))
 				{
 					vetorPredadores[k] = new Predador(i,j);
 					k++;
 				}
-				if(Ambiente.existePresa(i, j))
+				if(Ambiente.existePresa(i, j) >0)
 				{
 					//vetorPresas[l] = new Presa(i,j);
 					l++;

@@ -21,26 +21,20 @@ public class Gui extends JFrame {
 		Janela.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);	
 	}	
 	
-	public void desenhar(int[][] tabela) throws InterruptedException {
+	public void desenhar(int[][] tabela, int[][] rastro) throws InterruptedException {
 		painel = new JPanel();
 		painel.setLayout(new GridLayout(tabela.length,tabela[0].length));
 		for (int i=0; i<tabela.length;i++) {
 			for(int j=0;j<tabela[0].length;j++) {
 				JPanel bloco = new JPanel();
 				/*
-				 VALOR		REPRESENTAï¿½ï¿½O 
-				 0			Pixel livre (verde)
+				 VALOR		REPRESENTAçãO 
 				 1			Presa em modo normal (Branco)
-				 2			Presa no modo defensivo (Vermelho) 
-				 3			Predador (Cinza) 
-				  
+				 2			Presa no modo defensivo (Vermelho) 			 
+				 3			Predador (Cinza)
+				 Default	Pixel livre (verde)(verifica rastro) 
 				 */
 				switch(tabela[i][j]) {
-					case 0:{
-						Color bg = new Color(124, 252, 0);
-						bloco.setBackground(bg);
-						break;
-					}
 					case 1:{
 						Color bg = new Color(240, 240, 240);
 						bloco.setBackground(bg);
@@ -57,10 +51,29 @@ public class Gui extends JFrame {
 						break;
 					}
 					default: {
-						Color bg = new Color(124, 252, 0);
-						bloco.setBackground(bg);
-						break;
-					}
+						switch(rastro[i][j]) {
+							case 1:{
+								Color bg = new Color(124, 252, 0);
+								bloco.setBackground(bg);
+								break;
+							}
+							case 2:{
+								Color bg = new Color(124, 252, 0);
+								bloco.setBackground(bg);
+								break;
+							}
+							case 3:{
+								Color bg = new Color(124, 252, 0);
+								bloco.setBackground(bg);
+								break;								
+							}
+							default: {
+								Color bg = new Color(124, 252, 0);
+								bloco.setBackground(bg);
+								break;	
+							}
+						}
+					}	
 				}
 				painel.add(bloco);
 				
