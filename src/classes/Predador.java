@@ -165,27 +165,21 @@ public class Predador {
 		
 		if (r==0) //vai para cima
 		{
-			i--;
-			if(i<0) i+=Ambiente.getNrLinhas();
+			i = Ambiente.ajustaLinha(i--);
 			
 		}
 		if (r==1) //vai para a direita
 		{
-			j++;
-			if(j>=Ambiente.getNrColunas()) j-=Ambiente.getNrColunas();
+			j = Ambiente.ajustaColuna(j++);
 			
 		}
 		if (r==2) //vai para baixo
 		{
-			i++;
-			if(i>=Ambiente.getNrLinhas()) i-=Ambiente.getNrLinhas();
-			
+			i = Ambiente.ajustaLinha(i++);			
 		}
 		if (r==3) //vai para a esquerda
 		{
-			j--;
-			if(j<0) j+=Ambiente.getNrColunas();
-			
+			j = Ambiente.ajustaColuna(j--);			
 		}
 		if (!Ambiente.existePredador(i, j))
 		{

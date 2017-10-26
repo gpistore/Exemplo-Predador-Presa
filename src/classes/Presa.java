@@ -2,9 +2,12 @@ package classes;
 
 import java.util.Random;
 
+import javax.crypto.ExemptionMechanismSpi;
+
 public class Presa {
-	private int qualidadeEmocional;
-	private int intesidadeEmocional;
+	private int iteracoesQualidade = 5; // se após n iterações ela não detectar nenhum predador ou presa, atualiza o estado emocional 
+	private int qualidadeEmocional; // de - 3 a 3
+	private int intesidadeEmocional; // de 0 a 3
 	private int tipo; // 3: viver 4: fugir
 	private int linha;
 	private int coluna;
@@ -34,29 +37,75 @@ public class Presa {
 		int posicaoPresaFugindo = verificaPresaFugindo();
 		if(posicaoPredador > 0)
 		{
+			iteracoesQualidade = 0;
 			fugir(posicaoPredador, 4);
 		}
-		else if (posicaoPresaFugindo > 0){
+		else if (posicaoPresaFugindo > 0 || qualidadeEmocional < 0){
+			iteracoesQualidade = 0;
 			fugir(posicaoPredador, 3);			
 		}
 		else
-		{			
+		{	
+			if (iteracoesQualidade < 5)
+				iteracoesQualidade++;
+			else
+			{
+				if (qualidadeEmocional < 1)
+					qualidadeEmocional++;
+				if (intesidadeEmocional > 0)
+					intesidadeEmocional--;
+				
+				iteracoesQualidade = 0;
+			}
+			
 			viver();
 		}
 	}
 	
+	private void atualizaEstadoEmocional(int valor){
+		if (qualidadeEmocional - valor >= -3)
+			qualidadeEmocional -= valor;
+		if (intesidadeEmocional + valor <= 3)
+			intesidadeEmocional =+ valor;		
+	}
+		
+	
 	private void fugir(int posicao, int tipo){
-		if (tipo == 3){
+		if (tipo == 3){ // viver
+			atualizaEstadoEmocional(1);						
+		}
+		else{ // fugir			
+			int valor = 0, qtd = qtdPredadores();			
+			if (qtd == 1){				
+				valor = 2;
+			}
+			else if (qtd >= 2){
+				valor = 3;
+			}
+
+			atualizaEstadoEmocional(valor);
+			
 			if (iteracoes < 8){			
-				iteracoes++;
-				velocidade = (qualidadeEmocional + intesidadeEmocional)/2;			
+				iteracoes++;						
 			}
 			else
-				velocidade = 1;
+				velocidade = 1;			
+		}
+		
+		// DEVE CALCULAR A VELOCIDADE AQUI CONFORME A QUALIDADE E INTENSIDADE EMOCIONAL
+		
+		if (qualidadeEmocional == 1 && intesidadeEmocional == 1){
+			velocidade = 1;
 		}
 		else{
-			
+			/*Quanto maior o perigo, maior a velocidade da presa.
+			Por exemplo, a velocidade máxima da presa é alcançada
+			quando QE = -3 e IE = 3 (determinar deslocamento de
+			maior número de células por iteração).*/			
 		}
+			
+		
+		
 		
 		/*
 		   1 diagonal superior esquerda
@@ -168,6 +217,18 @@ public class Presa {
 		return 0;
 	}
 	
+	private int qtdPredadores(){
+		int qtd = 0;
+		for(int i = linha-1 ; i<linha+2 ; i++){			
+			for(int j = coluna -1 ; j<coluna+2 ; j++)
+			{				
+				if (Ambiente.existePredador(i, j))
+					qtd++;
+			}
+		}
+		return qtd;		
+	}
+	
 	private int verificaPresaFugindo(){
 		int posicao = 0;
 		for(int i = linha-1 ; i<linha+2 ; i++){			
@@ -182,6 +243,20 @@ public class Presa {
 		return 0;
 	}
 	
+	private boolean verificaPresaLivre(){
+		int posicao = 0;
+		for(int i = linha-1 ; i<linha+2 ; i++){			
+			for(int j = coluna -1 ; j<coluna+2 ; j++)
+			{
+				posicao++;
+				if (Ambiente.existePresaLivre(i, j)){
+					return true;
+				}
+			}
+		}
+		return false;
+	}	
+	
 	private void viver()
 	{		
 		Random gerador = new Random();
@@ -195,35 +270,32 @@ public class Presa {
 		
 		if (r==0) //vai para cima
 		{
-			i--;
-			if(i<0) i+=Ambiente.getNrLinhas();
+			i = Ambiente.ajustaLinha(i--);			
+		}
+		else if (r==1) //vai para a direita
+		{
+			j = Ambiente.ajustaColuna(j++);
 			
 		}
-		if (r==1) //vai para a direita
+		else if (r==2) //vai para baixo
 		{
-			j++;
-			if(j>=Ambiente.getNrColunas()) j-=Ambiente.getNrColunas();
+			i = Ambiente.ajustaLinha(i++);
 			
 		}
-		if (r==2) //vai para baixo
+		else if (r==3) //vai para a esquerda
 		{
-			i++;
-			if(i>=Ambiente.getNrLinhas()) i-=Ambiente.getNrLinhas();
-			
-		}
-		if (r==3) //vai para a esquerda
-		{
-			j--;
-			if(j<0) j+=Ambiente.getNrColunas();
+			j = Ambiente.ajustaColuna(j--);
 			
 		}
 		if (!Ambiente.existePredador(i, j))
-		{
-			
+		{		
 			linhaNova = i;
 			colunaNova = j;
 			dir = r;
 			
+			if (verificaPresaLivre()){ 
+				qualidadeEmocional++;
+			}
 		}
 	}
 			
