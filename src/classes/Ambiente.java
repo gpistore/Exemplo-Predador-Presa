@@ -74,7 +74,7 @@ public class Ambiente {
 	        while(nrPresas>0) {
 	            int linha = gerador.nextInt(nrLinhas);
 	            int coluna = gerador.nextInt(nrColunas);
-	            tabuleiro[linha][coluna] = 2;
+	            tabuleiro[linha][coluna] = 3;
 	            nrPresas --;
 	        }       
 	    }
@@ -142,23 +142,9 @@ public class Ambiente {
 	        return tabuleiro[linha][coluna];
 	    }
 	   
-	    public static void desenha(int linha,int coluna, int tipo) {
-	        //Tipo de
-	        //0 = livre
-	        //1 = predador
-	        //2 = presa
-	        //3 ao 8 = rastro
-	       	       
-	        int [][] tabela = new int[nrLinhas][nrColunas]; 
-	        for (int i=0; i < nrLinhas; i++) {
-	            for (int j=0; j < nrColunas; j++){
-	                tabela[i][j]=tabuleiro[i][j];
-	            }
-	        }
-	        tabela[linha][coluna]= tipo;
-	           
+	    public static void desenha() {
 	        try {
-	            tela.desenhar(tabela,rastro);
+	            tela.desenhar(tabuleiro,rastro);
 	        } catch (InterruptedException e) {
 	            // TODO Auto-generated catch block
 	            e.printStackTrace();

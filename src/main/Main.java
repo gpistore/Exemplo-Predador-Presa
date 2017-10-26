@@ -10,8 +10,6 @@ import gui.Gui;
 public class Main {
 
 	public static void main(String[] args) throws InterruptedException {
-		//Random gerador = new Random();
-		//Teste de interface
 		Predador[]  vetorPredadores = new Predador[Ambiente.getNrPredadores()];
 		Presa[] vetorPresas = new Presa[Ambiente.getNrPresas()];
 		gui.Gui tela = new Gui();
@@ -24,25 +22,25 @@ public class Main {
 			{
 				if(Ambiente.existePredador(i,j))
 				{
+
 					vetorPredadores[k] = new Predador(i,j);
 					k++;
 				}
 				if(Ambiente.existePresa(i, j) >0)
 				{
-					//vetorPresas[l] = new Presa(i,j);
+					vetorPresas[l] = new Presa(i,j);
 					l++;
 				}
 			}
 		}
 		
-		for(int i=0;i<Ambiente.getNrPresas();i++)
-		{
-			vetorPresas[i] = new Presa();
-		}
-		
+//		for(int i=0;i<Ambiente.getNrPresas();i++)
+//		{
+//			vetorPresas[i] = new Presa();
+//		}
+		Ambiente.desenha();
 		while(Ambiente.getNrPresas()!=0)
 		{
-			
 			
 		}
 		
