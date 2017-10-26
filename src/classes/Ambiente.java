@@ -122,6 +122,17 @@ public class Ambiente {
 		    return false;
 	    }
 	    
+	    public static boolean existePresaLivre(int i, int j) {
+	    	if(i<0) i+=nrLinhas;
+	    	if(j<0) j+=nrColunas;
+	    	if(i>=nrLinhas) i-=nrLinhas;
+	    	if(j>=nrColunas) j-=nrColunas;
+	        if (tabuleiro[i][j] == 3) {
+	            return true; 
+	        }
+		    return false;
+	    }
+	    
 	    public static int existeFeromonio(int i, int j) {
 	    	if(i<0) i+=nrLinhas;
 	    	if(j<0) j+=nrColunas;
