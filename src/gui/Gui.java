@@ -29,34 +29,33 @@ public class Gui extends JFrame {
 				JPanel bloco = new JPanel();
 				/*
 				 VALOR		REPRESENTAçãO 
-				 1			Presa em modo normal (Branco)
-				 2			Presa no modo defensivo (Vermelho) 			 
-				 3			Predador (Cinza)
+				 3			Presa em modo normal (Branco)
+				 4			Presa no modo defensivo (Vermelho) 			 
+				 1			Predador vivendo (Cinza)
+				 2			Predador caçando (Cinza)
 				 Default	Pixel livre (verde)(verifica rastro) 
 				 */
 				switch(tabela[i][j]) {
 					case 1:{
-						Color bg = new Color(240, 240, 240);
-						bloco.setBackground(bg);
-						break;
-					}
-					case 2:{
-						Color bg = new Color(255, 40, 40);
-						bloco.setBackground(bg);
-						break;
-					}
-					case 3:{
 						Color bg = new Color(100, 100, 100);
 						bloco.setBackground(bg);
 						break;
 					}
-					
-					case 4:{
+					case 2:{
 						Color bg = new Color(50, 50, 50);
 						bloco.setBackground(bg);
 						break;
 					}
-					
+					case 3:{
+						Color bg = new Color(240, 240, 240);
+						bloco.setBackground(bg);
+						break;
+					}
+					case 4:{
+						Color bg = new Color(255, 40, 40);
+						bloco.setBackground(bg);
+						break;
+					}
 					default: {
 						switch(rastro[i][j]) {
 							case 4:{
