@@ -50,20 +50,32 @@ public class Gui extends JFrame {
 						bloco.setBackground(bg);
 						break;
 					}
+					
+					case 4:{
+						Color bg = new Color(50, 50, 50);
+						bloco.setBackground(bg);
+						break;
+					}
+					
 					default: {
 						switch(rastro[i][j]) {
-							case 1:{
-								Color bg = new Color(124, 252, 0);
-								bloco.setBackground(bg);
-								break;
-							}
-							case 2:{
-								Color bg = new Color(124, 252, 0);
+							case 4:{
+								Color bg = new Color(255, 252, 0);
 								bloco.setBackground(bg);
 								break;
 							}
 							case 3:{
-								Color bg = new Color(124, 252, 0);
+								Color bg = new Color(247, 254, 46);
+								bloco.setBackground(bg);
+								break;
+							}
+							case 2:{
+								Color bg = new Color(165, 223, 0);
+								bloco.setBackground(bg);
+								break;								
+							}
+							case 1:{
+								Color bg = new Color(172, 250, 58);
 								bloco.setBackground(bg);
 								break;								
 							}
@@ -82,6 +94,7 @@ public class Gui extends JFrame {
 		Janela.add(painel, BorderLayout.CENTER);
 		Janela.pack();
 		Janela.setVisible(true);
+		painel.repaint();
 	}
 	
 	

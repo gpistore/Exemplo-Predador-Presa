@@ -149,13 +149,15 @@ public class Predador {
 	private void viver()
 	{		
 		Random gerador = new Random();
-		int r = gerador.nextInt(4);
+		
 		int i = linha;
 		int j = coluna;
 		
 		iteracoes = 0;
 		tipo = 1;
 		
+		
+		int r = gerador.nextInt(4);
 		int feromonio = verificaFeromonio();
 		
 		if (feromonio>=0)
@@ -165,30 +167,26 @@ public class Predador {
 		
 		if (r==0) //vai para cima
 		{
-			i = Ambiente.ajustaLinha(i--);
+			i--;
 			
 		}
 		if (r==1) //vai para a direita
 		{
-			j = Ambiente.ajustaColuna(j++);
+			j++;
 			
 		}
 		if (r==2) //vai para baixo
 		{
-			i = Ambiente.ajustaLinha(i++);			
+			i++;			
 		}
 		if (r==3) //vai para a esquerda
 		{
-			j = Ambiente.ajustaColuna(j--);			
+			j--;			
 		}
-		if (!Ambiente.existePredador(i, j))
-		{
-			
-			linhaNova = i;
-			colunaNova = j;
-			dir = r;
-			
-		}
+		
+		linhaNova = Ambiente.ajustaLinha(i);
+		colunaNova = Ambiente.ajustaColuna(j);	
+		dir = r;
 	}
 	
 	private int verificaFeromonio() {

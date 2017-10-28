@@ -7,7 +7,7 @@ import javax.crypto.ExemptionMechanismSpi;
 public class Presa {
 	private int iteracoesQualidade = 5; // se após n iterações ela não detectar nenhum predador ou presa, atualiza o estado emocional 
 	private int qualidadeEmocional; // de - 3 a 3
-	private int intesidadeEmocional; // de 0 a 3
+	private int intensidadeEmocional; // de 0 a 3
 	private int tipo; // 3: viver 4: fugir
 	private int linha;
 	private int coluna;
@@ -18,9 +18,11 @@ public class Presa {
 	private int velocidade;
 	
 	
-	public Presa(){
+	public Presa(int linha,int coluna){
+		this.linha = linha;
+		this.coluna = coluna;
 		qualidadeEmocional = 1;
-		intesidadeEmocional = 1;
+		intensidadeEmocional = 1;
 		tipo = 3;
 	}
 	
@@ -35,29 +37,44 @@ public class Presa {
 	{
 		int posicaoPredador = verificaPredador();
 		int posicaoPresaFugindo = verificaPresaFugindo();
+		
+		if (verificaPresaLivre()){ 
+			atualizaQualidadeEmocional(1);
+		}
+		if (posicaoPresaFugindo>0){ 
+			iteracoesQualidade = 0;
+			atualizaQualidadeEmocional(-1);
+			atualizaEstadoEmocional(1);
+		}
+		
 		if(posicaoPredador > 0)
 		{
 			iteracoesQualidade = 0;
-			fugir(posicaoPredador, 4);
+			atualizaQualidadeEmocional(-2);
+			atualizaIntensidadeEmocional(2);
+			if(posicaoPredador>1)
+			{
+				atualizaQualidadeEmocional(-1);
+				atualizaIntensidadeEmocional(1);
+			}
+
+			fugir(posicaoPredador);
 		}
-		else if (posicaoPresaFugindo > 0 || qualidadeEmocional < 0){
-			iteracoesQualidade = 0;
-			fugir(posicaoPredador, 3);			
+		else if(qualidadeEmocional < 0) //fuga sem predador
+		{
+			fugir(posicaoPresaFugindo); //se tiver presa fugindo, foge dela, se não tiver, move aleatório
 		}
 		else
 		{	
-			if (iteracoesQualidade < 5)
+			if (iteracoesQualidade < 4)
 				iteracoesQualidade++;
 			else
 			{
 				if (qualidadeEmocional < 1)
 					qualidadeEmocional++;
-				if (intesidadeEmocional > 0)
-					intesidadeEmocional--;
-				
-				iteracoesQualidade = 0;
+				if (intensidadeEmocional > 0)
+					intensidadeEmocional--;
 			}
-			
 			viver();
 		}
 	}
@@ -65,47 +82,37 @@ public class Presa {
 	private void atualizaEstadoEmocional(int valor){
 		if (qualidadeEmocional - valor >= -3)
 			qualidadeEmocional -= valor;
-		if (intesidadeEmocional + valor <= 3)
-			intesidadeEmocional =+ valor;		
+		if (intensidadeEmocional + valor <= 3)
+			intensidadeEmocional =+ valor;		
 	}
 		
+	private void atualizaQualidadeEmocional(int valor)
+	{
+		qualidadeEmocional += valor;
+		if (qualidadeEmocional < -3) qualidadeEmocional = -3;
+		if (qualidadeEmocional > 3) qualidadeEmocional = 3;
+	}
 	
-	private void fugir(int posicao, int tipo){
-		if (tipo == 3){ // viver
-			atualizaEstadoEmocional(1);						
-		}
-		else{ // fugir			
-			int valor = 0, qtd = qtdPredadores();			
-			if (qtd == 1){				
-				valor = 2;
-			}
-			else if (qtd >= 2){
-				valor = 3;
-			}
-
-			atualizaEstadoEmocional(valor);
-			
-			if (iteracoes < 8){			
-				iteracoes++;						
-			}
-			else
-				velocidade = 1;			
-		}
+	private void atualizaIntensidadeEmocional(int valor)
+	{
+		intensidadeEmocional += valor;
+		if (qualidadeEmocional > 3) qualidadeEmocional = 3;
+	}
+	
+	
+	
+	private void fugir(int posicao){
 		
-		// DEVE CALCULAR A VELOCIDADE AQUI CONFORME A QUALIDADE E INTENSIDADE EMOCIONAL
-		
-		if (qualidadeEmocional == 1 && intesidadeEmocional == 1){
-			velocidade = 1;
+	
+		tipo = 4;
+		int qtd = qtdPredadores();	
+		if (qtd >= 3){
+			morre();
+			return;
 		}
-		else{
-			/*Quanto maior o perigo, maior a velocidade da presa.
-			Por exemplo, a velocidade máxima da presa é alcançada
-			quando QE = -3 e IE = 3 (determinar deslocamento de
-			maior número de células por iteração).*/			
-		}
-			
-		
-		
+		iteracoes++;
+		velocidade = (-qualidadeEmocional + intensidadeEmocional)/2;
+		if(velocidade <1 || iteracoes >=8) velocidade = 1;
 		
 		/*
 		   1 diagonal superior esquerda
@@ -115,13 +122,35 @@ public class Presa {
 		   6 direita
 		   7 diagonal inferior esquerda
 		   8 inferior
-		   9 diagonal inferior direita
-		   
+		   9 diagonal inferior direita   
 		 */	
 		
 		Random r = new Random();
 		int posAleatoria = r.nextInt(2);
-		switch (posicao) {
+		if (posicao == 0)
+		{
+			posAleatoria = r.nextInt(4);
+		}
+		switch (posicao) { 
+		 	case 0: //se estiver fugindo de nada, vai aleatório;
+		 	{
+		 		if (posAleatoria == 1){
+					dir = 1;
+					colunaNova = Ambiente.ajustaColuna(coluna+velocidade);
+				}
+		 		if (posAleatoria == 2){
+					dir = 2;
+					linhaNova = Ambiente.ajustaLinha(linha+velocidade);
+				}
+		 		if (posAleatoria == 3){
+					dir = 3;
+					colunaNova = Ambiente.ajustaColuna(coluna-velocidade);
+				}
+		 		else{
+					dir = 0;
+					linhaNova = Ambiente.ajustaLinha(linha-velocidade);
+				}
+		 	}
 			case 1:
 			{
 				if (posAleatoria == 0){
@@ -202,6 +231,11 @@ public class Presa {
 		}			
 	}
 	
+	private void morre() {
+		Ambiente.presaMorre(linha, coluna);
+		
+	}
+
 	private int verificaPredador(){
 		int posicao = 0;
 		for(int i = linha-1 ; i<linha+2 ; i++){			
@@ -244,11 +278,9 @@ public class Presa {
 	}
 	
 	private boolean verificaPresaLivre(){
-		int posicao = 0;
 		for(int i = linha-1 ; i<linha+2 ; i++){			
 			for(int j = coluna -1 ; j<coluna+2 ; j++)
 			{
-				posicao++;
 				if (Ambiente.existePresaLivre(i, j)){
 					return true;
 				}
@@ -263,9 +295,9 @@ public class Presa {
 		int r = gerador.nextInt(4);
 		int i = linha;
 		int j = coluna;
-		
 		iteracoes = 0;
-		tipo = 1;
+		tipo = 3;
+		
 		
 		
 		if (r==0) //vai para cima
@@ -292,10 +324,7 @@ public class Presa {
 			linhaNova = i;
 			colunaNova = j;
 			dir = r;
-			
-			if (verificaPresaLivre()){ 
-				qualidadeEmocional++;
-			}
+
 		}
 	}
 			
