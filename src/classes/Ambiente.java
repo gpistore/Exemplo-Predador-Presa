@@ -8,8 +8,8 @@ import gui.Gui;
 public class Ambiente {
 	private static int nrLinhas= 30;
 	private static int nrColunas = 30;
-	private static int nrPresas = 15;
-	private static int nrPredadores = 20;
+	private static int nrPresas = 5;
+	private static int nrPredadores = 10;
 	private static ArrayList<Predador>  ListaPredadores = new ArrayList <Predador>();
 	private static ArrayList <Presa> ListaPresas = new ArrayList <Presa>();
 	private static int[][] tabuleiro = new int[nrLinhas][nrColunas];
@@ -233,10 +233,6 @@ public class Ambiente {
 					}
 					
 				}
-				else if (tipo == 3){
-					
-				}	
-				
 				tabuleiro[i][j] = tipo;
 			}			
 		}

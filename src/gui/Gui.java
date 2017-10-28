@@ -28,7 +28,7 @@ public class Gui extends JFrame {
 			for(int j=0;j<tabela[0].length;j++) {
 				JPanel bloco = new JPanel();
 				/*
-				 VALOR		REPRESENTAçãO 
+				 VALOR		REPRESENTAÇÂO 
 				 3			Presa em modo normal (Branco)
 				 4			Presa no modo defensivo (Vermelho) 			 
 				 1			Predador vivendo (Cinza)

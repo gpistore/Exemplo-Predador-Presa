@@ -302,21 +302,25 @@ public class Presa {
 		
 		if (r==0) //vai para cima
 		{
-			i = Ambiente.ajustaLinha(i--);			
+			i--;
+			i = Ambiente.ajustaLinha(i);			
 		}
 		else if (r==1) //vai para a direita
 		{
-			j = Ambiente.ajustaColuna(j++);
+			j++;
+			j = Ambiente.ajustaColuna(j);
 			
 		}
 		else if (r==2) //vai para baixo
 		{
-			i = Ambiente.ajustaLinha(i++);
+			i++;
+			i = Ambiente.ajustaLinha(i);
 			
 		}
 		else if (r==3) //vai para a esquerda
 		{
-			j = Ambiente.ajustaColuna(j--);
+			j--;
+			j = Ambiente.ajustaColuna(j);
 			
 		}
 		if (!Ambiente.existePredador(i, j))
