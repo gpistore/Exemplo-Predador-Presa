@@ -35,7 +35,7 @@ public class Main {
 			}
 			Ambiente.atualizaRastros();
 			Ambiente.desenha();
-			Thread.sleep(150);
+			Thread.sleep(500);
 		}
 	}
 

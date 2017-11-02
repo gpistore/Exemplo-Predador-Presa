@@ -36,7 +36,6 @@ public class Presa {
 	
 	public void escolha()
 	{
-		int posicaoPredador = verificaPredador();
 		int posicaoPresaFugindo = verificaPresaFugindo();
 		
 		if (verificaPresaLivre()){ 
@@ -45,20 +44,15 @@ public class Presa {
 		if (posicaoPresaFugindo>0){ 
 			iteracoesQualidade = 0;
 			atualizaQualidadeEmocional(-1);
-			atualizaEstadoEmocional(1);
 		}
 		
+		int posicaoPredador = verificaPredador();
 		if(posicaoPredador > 0)
 		{
 			iteracoesQualidade = 0;
 			atualizaQualidadeEmocional(-2);
 			atualizaIntensidadeEmocional(2);
-			if(posicaoPredador>1)
-			{
-				atualizaQualidadeEmocional(-1);
-				atualizaIntensidadeEmocional(1);
-			}
-
+			
 			fugir(posicaoPredador);
 		}
 		else if(qualidadeEmocional < 0) //fuga sem predador
@@ -79,13 +73,6 @@ public class Presa {
 			viver();
 		}
 	}
-	
-	private void atualizaEstadoEmocional(int valor){
-		if (qualidadeEmocional - valor >= -3)
-			qualidadeEmocional -= valor;
-		if (intensidadeEmocional + valor <= 3)
-			intensidadeEmocional =+ valor;		
-	}
 		
 	private void atualizaQualidadeEmocional(int valor)
 	{
@@ -101,7 +88,7 @@ public class Presa {
 	}
 	
 	private void calculavelocidade() {
-		this.velocidade = (-qualidadeEmocional + intensidadeEmocional)/2;
+		this.velocidade = (intensidadeEmocional - qualidadeEmocional)/2;
 		if(velocidade <1 || iteracoes >=8) velocidade = 1;
 	}
 	
@@ -133,7 +120,7 @@ public class Presa {
 		int j = coluna;
 		if (posicao == 0)
 		{
-			posAleatoria = r.nextInt(4);
+			posicao = r.nextInt(4);
 		}
 		switch (posicao) { 
 		 	case 0: //se estiver fugindo de nada, vai aleatório;
