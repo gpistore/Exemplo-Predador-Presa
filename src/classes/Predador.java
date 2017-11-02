@@ -23,9 +23,10 @@ public class Predador {
 	
 	public void acao()
 	{
-		Ambiente.moveAgente(linha, coluna, linhaNova, colunaNova, tipo, dir);
-		linha = linhaNova;
-		coluna = colunaNova;
+		if(Ambiente.moveAgente(linha, coluna, linhaNova, colunaNova, tipo, dir)) {
+			linha = linhaNova;
+			coluna = colunaNova;
+		}
 	}
 	
 	public void escolha()
@@ -54,8 +55,11 @@ public class Predador {
 		   9 diagonal inferior direita
 		   
 		 */
+		int i = linha;
+		int j = coluna;
 		
 		tipo = 2;
+
 		if (iteracoes < 5){			
 			iteracoes++;
 			velocidade = 4;			
@@ -70,11 +74,11 @@ public class Predador {
 			{
 				if (posAleatoria == 0){
 					dir = 3;
-					colunaNova = Ambiente.ajustaColuna(coluna-velocidade);
+					j = j-velocidade;
 				}
 				else{
 					dir = 0;
-					linhaNova = Ambiente.ajustaLinha(linha-velocidade);
+					i = i-velocidade;
 				}
 								
 				break;
@@ -83,18 +87,18 @@ public class Predador {
 			case 2:
 			{
 				dir = 0;
-				linhaNova = Ambiente.ajustaLinha(linha-velocidade);				
+				i = i-velocidade;				
 				break;
 			}		
 			case 3:
 			{
 				if (posAleatoria == 0){
 					dir = 1;
-					colunaNova = Ambiente.ajustaColuna(coluna+velocidade);
+					j = j+velocidade;
 				}
 				else{
 					dir = 0;
-					linhaNova = Ambiente.ajustaLinha(linha-velocidade);
+					i = i-velocidade;
 				}
 				
 				break;
@@ -102,24 +106,24 @@ public class Predador {
 			case 4:
 			{
 				dir = 3;
-				colunaNova = Ambiente.ajustaColuna(coluna-velocidade);			
+				j = j-velocidade;			
 				break;
 			}	
 			case 6:
 			{
 				dir = 1;
-				colunaNova = Ambiente.ajustaColuna(coluna+velocidade);				
+				j = j+velocidade;				
 				break;
 			}	
 			case 7:
 			{
 				if (posAleatoria == 0){
 					dir = 3;
-					colunaNova = Ambiente.ajustaColuna(coluna-velocidade);
+					j = j-velocidade;
 				}
 				else{
 					dir = 2;
-					linhaNova = Ambiente.ajustaLinha(linha+velocidade);
+					i = i+velocidade;
 				}
 				
 				break;
@@ -127,23 +131,27 @@ public class Predador {
 			case 8:
 			{
 				dir = 2;
-				linhaNova = Ambiente.ajustaLinha(linha+velocidade);	
+				i = i+velocidade;	
 				break;
 			}	
 			case 9:
 			{
 				if (posAleatoria == 0){
 					dir = 1;
-					colunaNova = Ambiente.ajustaColuna(coluna+velocidade);
+					j = j+velocidade;
 				}
 				else{
 					dir = 2;
-					linhaNova = Ambiente.ajustaLinha(linha+velocidade);
+					i = i+velocidade;
 				}
 				
 				break;
 			}			
-		}					
+		}
+		
+		colunaNova = Ambiente.ajustaColuna(j);
+		linhaNova = Ambiente.ajustaLinha(i);
+		System.out.println(linhaNova+" - "+colunaNova);
 	}
 	
 	private void viver()

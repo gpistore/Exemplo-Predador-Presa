@@ -9,7 +9,7 @@ public class Ambiente {
 	private static int nrLinhas= 30;
 	private static int nrColunas = 30;
 	private static int nrPresas = 5;
-	private static int nrPredadores = 10;
+	private static int nrPredadores = 15;
 	private static ArrayList<Predador>  ListaPredadores = new ArrayList <Predador>();
 	private static ArrayList <Presa> ListaPresas = new ArrayList <Presa>();
 	private static int[][] tabuleiro = new int[nrLinhas][nrColunas];
@@ -161,14 +161,25 @@ public class Ambiente {
 	        }
 	    }
 
-		public static void moveAgente(int iAntigo, int jAntigo, int i, int j, int tipo, int dir) {
+		public static boolean moveAgente(int iAntigo, int jAntigo, int i, int j, int tipo, int dir) {
 			if(tabuleiro[i][j] == 0){
 				tabuleiro[iAntigo][jAntigo] = 0;							
+				if(tipo == 2) {
+					System.out.println("iAntigo ="+iAntigo);
+					System.out.println("jAntigo ="+jAntigo);
+					System.out.println("i ="+i);
+					System.out.println("j="+j);
+					System.out.println("dir ="+dir);
+					System.out.println("------------------");
+				}
+				
 				
 				// Atualiza o rastro caso seja predador caçando
 				if(tipo == 2){
 					int iAtual = iAntigo; 
 					int jAtual = jAntigo;
+					int irastro = i;
+					int jrastro= j;
 					int nivelFeromonio = 0;
 					switch (dir) 
 					{
@@ -177,14 +188,14 @@ public class Ambiente {
 							{
 								if (tabuleiro[iAtual][jAtual] == 3 || tabuleiro[iAtual][jAtual] == 4){
 									iAtual++;
-									i = ajustaLinha(iAtual);
+									irastro = ajustaLinha(iAtual);
 									break;
 								}
 									
 								rastro[iAtual][jAtual] = nivelFeromonio++;
 								iAtual--;
-								i = ajustaLinha(iAtual);
-							}while(iAtual!=i);							
+								irastro = ajustaLinha(iAtual);
+							}while(iAtual!=irastro);							
 							break;
 							
 						case 1:
@@ -192,13 +203,13 @@ public class Ambiente {
 							{
 								if (tabuleiro[iAtual][jAtual] == 3 || tabuleiro[iAtual][jAtual] == 4){
 									jAtual--;
-									j = ajustaColuna(jAtual);
+									jrastro = ajustaColuna(jAtual);
 									break;
 								}
 								rastro[iAtual][jAtual] = nivelFeromonio++;								
 								jAtual++;
-								j = ajustaColuna(jAtual);
-							}while(jAtual!=j);							
+								jrastro = ajustaColuna(jAtual);
+							}while(jAtual!=jrastro);							
 							break;
 							
 						case 2:
@@ -206,14 +217,14 @@ public class Ambiente {
 							{
 								if (tabuleiro[iAtual][jAtual] == 3 || tabuleiro[iAtual][jAtual] == 4){
 									iAtual--;
-									i = ajustaLinha(iAtual);
+									irastro = ajustaLinha(iAtual);
 									break;
 								}
 								
 								rastro[iAtual][jAtual] = nivelFeromonio++;
 								iAtual++;
-								i = ajustaLinha(iAtual);
-							}while(iAtual!=i);	
+								irastro = ajustaLinha(iAtual);
+							}while(iAtual!=irastro);	
 							break;
 							
 						case 3:
@@ -221,20 +232,22 @@ public class Ambiente {
 							{
 								if (tabuleiro[iAtual][jAtual] == 3 || tabuleiro[iAtual][jAtual] == 4){
 									jAtual++;
-									j = ajustaColuna(jAtual);
+									jrastro = ajustaColuna(jAtual);
 									break;
 								}
 								
 								rastro[iAtual][jAtual] = nivelFeromonio++;
 								jAtual++;
-								j = ajustaColuna(jAtual);
-							}while(jAtual!=j);	
+								jrastro = ajustaColuna(jAtual);
+							}while(jAtual!=jrastro);	
 							break;
 					}
-					
 				}
 				tabuleiro[i][j] = tipo;
-			}			
+				return true;
+			}else {
+				return false;
+			}
 		}
 		
 		public void atualizaRastros() {
@@ -265,6 +278,7 @@ public class Ambiente {
 		}
 		
 		public static void presaMorre(int i, int j)
+		/* revisar remoção da presa do array de presas */
 		{
 			tabuleiro[i][j] = 0;
 			nrPresas--;

@@ -28,9 +28,10 @@ public class Presa {
 	
 	public void acao()
 	{
-		Ambiente.moveAgente(linha, coluna, linhaNova, colunaNova, tipo, dir);
-		linha = linhaNova;
-		coluna = colunaNova;
+		if(Ambiente.moveAgente(linha, coluna, linhaNova, colunaNova, tipo, dir)) {
+			linha = linhaNova;
+			coluna = colunaNova;
+		}
 	}
 	
 	public void escolha()
@@ -99,11 +100,13 @@ public class Presa {
 		if (qualidadeEmocional > 3) qualidadeEmocional = 3;
 	}
 	
-	
+	private void calculavelocidade() {
+		this.velocidade = (-qualidadeEmocional + intensidadeEmocional)/2;
+		if(velocidade <1 || iteracoes >=8) velocidade = 1;
+	}
 	
 	private void fugir(int posicao){
 		
-	
 		tipo = 4;
 		int qtd = qtdPredadores();	
 		if (qtd >= 3){
@@ -111,8 +114,7 @@ public class Presa {
 			return;
 		}
 		iteracoes++;
-		velocidade = (-qualidadeEmocional + intensidadeEmocional)/2;
-		if(velocidade <1 || iteracoes >=8) velocidade = 1;
+		calculavelocidade();
 		
 		/*
 		   1 diagonal superior esquerda
@@ -127,6 +129,8 @@ public class Presa {
 		
 		Random r = new Random();
 		int posAleatoria = r.nextInt(2);
+		int i = linha;
+		int j = coluna;
 		if (posicao == 0)
 		{
 			posAleatoria = r.nextInt(4);
@@ -136,30 +140,31 @@ public class Presa {
 		 	{
 		 		if (posAleatoria == 1){
 					dir = 1;
-					colunaNova = Ambiente.ajustaColuna(coluna+velocidade);
+					j = j+velocidade;
 				}
 		 		if (posAleatoria == 2){
 					dir = 2;
-					linhaNova = Ambiente.ajustaLinha(linha+velocidade);
+					i=i+velocidade;
 				}
 		 		if (posAleatoria == 3){
 					dir = 3;
-					colunaNova = Ambiente.ajustaColuna(coluna-velocidade);
+					j=j-velocidade;
 				}
 		 		else{
 					dir = 0;
-					linhaNova = Ambiente.ajustaLinha(linha-velocidade);
+					i=i-velocidade;
 				}
+		 		break;
 		 	}
 			case 1:
 			{
 				if (posAleatoria == 0){
 					dir = 1;
-					colunaNova = Ambiente.ajustaColuna(coluna+velocidade);
+					j=j+velocidade;
 				}
 				else{
 					dir = 2;
-					linhaNova = Ambiente.ajustaLinha(linha+velocidade);
+					i=i+velocidade;
 				}
 								
 				break;
@@ -168,18 +173,18 @@ public class Presa {
 			case 2:
 			{
 				dir = 2;
-				linhaNova = Ambiente.ajustaLinha(linha+velocidade);				
+				i=i+velocidade;				
 				break;
 			}		
 			case 3:
 			{
 				if (posAleatoria == 0){
 					dir = 3;
-					colunaNova = Ambiente.ajustaColuna(coluna-velocidade);
+					j=j-velocidade;
 				}
 				else{
 					dir = 2;
-					linhaNova = Ambiente.ajustaLinha(linha+velocidade);
+					i=i+velocidade;
 				}
 				
 				break;
@@ -187,24 +192,24 @@ public class Presa {
 			case 4:
 			{
 				dir = 1;
-				colunaNova = Ambiente.ajustaColuna(coluna+velocidade);			
+				j = j+velocidade;			
 				break;
 			}	
 			case 6:
 			{
 				dir = 3;
-				colunaNova = Ambiente.ajustaColuna(coluna-velocidade);				
+				j = j-velocidade;				
 				break;
 			}	
 			case 7:
 			{
 				if (posAleatoria == 0){
 					dir = 1;
-					colunaNova = Ambiente.ajustaColuna(coluna+velocidade);
+					j= j+velocidade;
 				}
 				else{
 					dir = 0;
-					linhaNova = Ambiente.ajustaLinha(linha-velocidade);
+					i = i-velocidade;
 				}
 				
 				break;
@@ -212,23 +217,26 @@ public class Presa {
 			case 8:
 			{
 				dir = 0;
-				linhaNova = Ambiente.ajustaLinha(linha-velocidade);	
+				i = i-velocidade;	
 				break;
 			}	
 			case 9:
 			{
 				if (posAleatoria == 0){
 					dir = 3;
-					colunaNova = Ambiente.ajustaColuna(coluna-velocidade);
+					j = j-velocidade;
 				}
 				else{
 					dir = 0;
-					linhaNova = Ambiente.ajustaLinha(linha-velocidade);
+					i = i-velocidade;
 				}
 				
 				break;
 			}			
-		}			
+		}
+		linhaNova = Ambiente.ajustaColuna(i);
+		colunaNova = Ambiente.ajustaColuna(j);
+		
 	}
 	
 	private void morre() {
@@ -323,8 +331,7 @@ public class Presa {
 			j = Ambiente.ajustaColuna(j);
 			
 		}
-		if (!Ambiente.existePredador(i, j))
-		{		
+		if (!Ambiente.existePredador(i, j)){		
 			linhaNova = i;
 			colunaNova = j;
 			dir = r;

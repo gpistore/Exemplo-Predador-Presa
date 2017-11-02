@@ -29,10 +29,10 @@ public class Gui extends JFrame {
 				JPanel bloco = new JPanel();
 				/*
 				 VALOR		REPRESENTAÇÂO 
-				 3			Presa em modo normal (Branco)
-				 4			Presa no modo defensivo (Vermelho) 			 
 				 1			Predador vivendo (Cinza)
 				 2			Predador caçando (Cinza)
+				 3			Presa em modo normal (Branco)
+				 4			Presa no modo defensivo (Vermelho) 			 
 				 Default	Pixel livre (verde)(verifica rastro) 
 				 */
 				switch(tabela[i][j]) {
@@ -78,10 +78,15 @@ public class Gui extends JFrame {
 								bloco.setBackground(bg);
 								break;								
 							}
-							default: {
+							case 0: {
 								Color bg = new Color(124, 252, 0);
 								bloco.setBackground(bg);
 								break;	
+							}
+							default:{
+								Color bg = new Color(255, 252, 0);
+								bloco.setBackground(bg);
+								break;
 							}
 						}
 					}	

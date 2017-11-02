@@ -35,7 +35,7 @@ public class Main {
 			}
 			
 			Ambiente.desenha();
-			Thread.sleep(200);
+			Thread.sleep(150);
 		}
 	}
 
