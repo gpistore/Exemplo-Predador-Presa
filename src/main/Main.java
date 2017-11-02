@@ -33,7 +33,7 @@ public class Main {
 			for(Presa presa: Ambiente.getListaPresas()){
 				presa.acao();
 			}
-			
+			Ambiente.atualizaRastros();
 			Ambiente.desenha();
 			Thread.sleep(150);
 		}

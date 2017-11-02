@@ -178,68 +178,42 @@ public class Ambiente {
 				if(tipo == 2){
 					int iAtual = iAntigo; 
 					int jAtual = jAntigo;
-					int irastro = i;
-					int jrastro= j;
-					int nivelFeromonio = 0;
+					int nivelFeromonio = 1;
 					switch (dir) 
 					{
 						case 0:
-							do
-							{
-								if (tabuleiro[iAtual][jAtual] == 3 || tabuleiro[iAtual][jAtual] == 4){
-									iAtual++;
-									irastro = ajustaLinha(iAtual);
-									break;
-								}
-									
-								rastro[iAtual][jAtual] = nivelFeromonio++;
+							while(iAtual!=i){
+								rastro[iAtual][jAtual] = nivelFeromonio;
 								iAtual--;
-								irastro = ajustaLinha(iAtual);
-							}while(iAtual!=irastro);							
+								iAtual = ajustaLinha(iAtual);
+								nivelFeromonio++;
+							}							
 							break;
 							
 						case 1:
-							do
-							{
-								if (tabuleiro[iAtual][jAtual] == 3 || tabuleiro[iAtual][jAtual] == 4){
-									jAtual--;
-									jrastro = ajustaColuna(jAtual);
-									break;
-								}
-								rastro[iAtual][jAtual] = nivelFeromonio++;								
+							while(jAtual!=j){
+								rastro[iAtual][jAtual] = nivelFeromonio;
 								jAtual++;
-								jrastro = ajustaColuna(jAtual);
-							}while(jAtual!=jrastro);							
+								jAtual = ajustaLinha(jAtual);
+								nivelFeromonio++;
+							}							
 							break;
 							
 						case 2:
-							do
-							{
-								if (tabuleiro[iAtual][jAtual] == 3 || tabuleiro[iAtual][jAtual] == 4){
-									iAtual--;
-									irastro = ajustaLinha(iAtual);
-									break;
-								}
-								
-								rastro[iAtual][jAtual] = nivelFeromonio++;
+							while(iAtual!=i){
+								rastro[iAtual][jAtual] = nivelFeromonio;
 								iAtual++;
-								irastro = ajustaLinha(iAtual);
-							}while(iAtual!=irastro);	
-							break;
+								iAtual = ajustaLinha(iAtual);
+								nivelFeromonio++;
+							}
 							
 						case 3:
-							do
-							{
-								if (tabuleiro[iAtual][jAtual] == 3 || tabuleiro[iAtual][jAtual] == 4){
-									jAtual++;
-									jrastro = ajustaColuna(jAtual);
-									break;
-								}
-								
-								rastro[iAtual][jAtual] = nivelFeromonio++;
-								jAtual++;
-								jrastro = ajustaColuna(jAtual);
-							}while(jAtual!=jrastro);	
+							while(jAtual!=j){
+								rastro[iAtual][jAtual] = nivelFeromonio;
+								jAtual--;
+								jAtual = ajustaLinha(jAtual);
+								nivelFeromonio++;
+							}	
 							break;
 					}
 				}
@@ -250,7 +224,7 @@ public class Ambiente {
 			}
 		}
 		
-		public void atualizaRastros() {
+		public static void atualizaRastros() {
 			for(int i=0;i<nrLinhas;i++){
 				for(int j=0;j<nrColunas;j++){
 					if(rastro[i][j]>0) {
