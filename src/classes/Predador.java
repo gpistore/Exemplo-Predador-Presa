@@ -151,7 +151,6 @@ public class Predador {
 		
 		colunaNova = Ambiente.ajustaColuna(j);
 		linhaNova = Ambiente.ajustaLinha(i);
-		System.out.println(linhaNova+" - "+colunaNova);
 	}
 	
 	private void viver()

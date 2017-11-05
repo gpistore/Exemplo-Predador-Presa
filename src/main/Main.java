@@ -15,15 +15,17 @@ public class Main {
 		Ambiente.inicializa(tela);
 		
 		Ambiente.desenha();
-		
-		while(Ambiente.getNrPresas()>0)
+		int iteracoes = 0;
+		while(Ambiente.getNrPresas()>0 && iteracoes < 5000)
 		{
 			for(Predador predador: Ambiente.getListaPredadores()){
 				predador.escolha();
 			}
 			
 			for(Presa presa: Ambiente.getListaPresas()){
-				presa.escolha();
+				if(!presa.EstaMorta()) {
+					presa.escolha();	
+				}
 			}
 			
 			for(Predador predador: Ambiente.getListaPredadores()){
@@ -31,12 +33,18 @@ public class Main {
 			}
 			
 			for(Presa presa: Ambiente.getListaPresas()){
-				presa.acao();
+				if(!presa.EstaMorta()) {
+					presa.acao();
+				}
 			}
 			Ambiente.atualizaRastros();
 			Ambiente.desenha();
-			Thread.sleep(500);
+			Thread.sleep(250);
+			iteracoes++;
 		}
+
+		Ambiente.finaliza(iteracoes);
+		
 	}
 
 }

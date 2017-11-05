@@ -6,10 +6,10 @@ import java.util.Random;
 import gui.Gui;
 
 public class Ambiente {
-	private static int nrLinhas= 30;
-	private static int nrColunas = 30;
-	private static int nrPresas = 5;
-	private static int nrPredadores = 15;
+	private static int nrLinhas= 50;
+	private static int nrColunas = 50;
+	private static int nrPresas =25;
+	private static int nrPredadores = 50;
 	private static ArrayList<Predador>  ListaPredadores = new ArrayList <Predador>();
 	private static ArrayList <Presa> ListaPresas = new ArrayList <Presa>();
 	private static int[][] tabuleiro = new int[nrLinhas][nrColunas];
@@ -38,6 +38,11 @@ public class Ambiente {
 
 	public static void setNrPredadores(int nrPredadores) {
 		Ambiente.nrPredadores = nrPredadores;
+	}
+	
+	public static void finaliza(int totaliteracoes) {
+		tela.finaliza(totaliteracoes, nrPresas);
+		
 	}
 	
 	public static int getNrLinhas() {
@@ -70,13 +75,14 @@ public class Ambiente {
 	
 	private static void inicializaPredadores()
 	    {
-	        Random gerador = new Random();   
-	        while(nrPredadores>0) {
+	        Random gerador = new Random();
+	       int totalpredadores = nrPredadores;
+	        while(totalpredadores>0) {
 	            int linha = gerador.nextInt(nrLinhas);
 	            int coluna = gerador.nextInt(nrColunas);
 	            tabuleiro[linha][coluna] = 1;
 	            ListaPredadores.add(new Predador(linha,coluna)); 
-	            nrPredadores --;
+	            totalpredadores --;
 	        }       
 	    }
 	   
@@ -164,15 +170,6 @@ public class Ambiente {
 		public static boolean moveAgente(int iAntigo, int jAntigo, int i, int j, int tipo, int dir) {
 			if(tabuleiro[i][j] == 0){
 				tabuleiro[iAntigo][jAntigo] = 0;							
-				if(tipo == 2) {
-					System.out.println("iAntigo ="+iAntigo);
-					System.out.println("jAntigo ="+jAntigo);
-					System.out.println("i ="+i);
-					System.out.println("j="+j);
-					System.out.println("dir ="+dir);
-					System.out.println("------------------");
-				}
-				
 				
 				// Atualiza o rastro caso seja predador caçando
 				if(tipo == 2){
@@ -252,9 +249,8 @@ public class Ambiente {
 		}
 		
 		public static void presaMorre(int i, int j)
-		/* revisar remoção da presa do array de presas */
 		{
 			tabuleiro[i][j] = 0;
-			nrPresas--;
+			nrPresas= nrPresas-1;
 		}		
 }

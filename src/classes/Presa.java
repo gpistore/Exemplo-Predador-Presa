@@ -16,7 +16,7 @@ public class Presa {
 	private int dir;
 	private int iteracoes;
 	private int velocidade;
-	
+	private boolean morta;
 	
 	public Presa(int linha,int coluna){
 		this.linha = linha;
@@ -54,23 +54,21 @@ public class Presa {
 			atualizaIntensidadeEmocional(2);
 			
 			fugir(posicaoPredador);
-		}
-		else if(qualidadeEmocional < 0) //fuga sem predador
-		{
-			fugir(posicaoPresaFugindo); //se tiver presa fugindo, foge dela, se não tiver, move aleatório
-		}
-		else
-		{	
-			if (iteracoesQualidade < 4)
+		}else { 
+			if(qualidadeEmocional < 0) { //fuga sem predador
+				fugir(posicaoPresaFugindo); //se tiver presa fugindo, foge dela, se não tiver, move aleatório	
+			}else {
+				viver();
+			}
+			
+			if (iteracoesQualidade < 4) {
 				iteracoesQualidade++;
-			else
-			{
+			}else{
 				if (qualidadeEmocional < 1)
 					qualidadeEmocional++;
 				if (intensidadeEmocional > 0)
 					intensidadeEmocional--;
 			}
-			viver();
 		}
 	}
 		
@@ -93,7 +91,6 @@ public class Presa {
 	}
 	
 	private void fugir(int posicao){
-		
 		tipo = 4;
 		int qtd = qtdPredadores();	
 		if (qtd >= 3){
@@ -226,9 +223,13 @@ public class Presa {
 		
 	}
 	
+	public boolean EstaMorta() {
+		return this.morta;
+	}
+	
 	private void morre() {
 		Ambiente.presaMorre(linha, coluna);
-		
+		this.morta = true;
 	}
 
 	private int verificaPredador(){
@@ -264,7 +265,7 @@ public class Presa {
 			for(int j = coluna -1 ; j<coluna+2 ; j++)
 			{
 				posicao++;
-				if (Ambiente.existePresaFugindo(i, j)){
+				if (Ambiente.existePresaFugindo(i, j) && posicao != 5){
 					return posicao;
 				}
 			}
@@ -325,6 +326,15 @@ public class Presa {
 
 		}
 	}
+	
+	public boolean verificaLocalizacao(int i, int j) {
+		if (this.linha == i && this.coluna == j){
+				return true;
+		}
+		return false;
+			}
+		
+	
 			
 
 }

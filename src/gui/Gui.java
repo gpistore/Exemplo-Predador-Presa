@@ -101,6 +101,19 @@ public class Gui extends JFrame {
 		painel.repaint();
 	}
 	
+	public void finaliza(int totaliteracoes,int presas) {
+		Janela.remove(painel);
+		JPanel painelfim = new JPanel();
+		JLabel Titulo = new JLabel("<html>Fim de Simulação <br> Após " + totaliteracoes + " iterações <br> Sobreviveram " + presas + " presas </html>");
+		Titulo.setHorizontalAlignment( SwingConstants.CENTER );
+		painelfim.add(Titulo,BorderLayout.NORTH);
+		Janela.add(painelfim, BorderLayout.CENTER);
+		Janela.pack();
+		painelfim.setVisible(true);
+		Janela.setVisible(true);
+	
+	}
+	
 	
 	
 }
